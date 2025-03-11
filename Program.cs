@@ -4,9 +4,16 @@ using TrilhaApiDesafio.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Adicionando arquivos de configuração
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 // Add services to the container.
 builder.Services.AddDbContext<OrganizadorContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
